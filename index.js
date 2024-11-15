@@ -2,9 +2,17 @@ import express from 'express';
 import axios from 'axios';
 import {ChartJSNodeCanvas} from "chartjs-node-canvas";
 import { promises as fs } from 'fs';
+import path from "path"
+import exphbs from "express-handlebars"
+
 
 const app = express();
 const port = 3000;
+
+app.engine("handlebars", exphbs.engine());
+app.set("view engine", "handlebars");
+app.use(express.static("images"));
+
 
 const API_KEY = "7PyxQOTTkNuSk4hQAROTy7L4QvgNle5ylacptKlpW8u8H3b4YFn7oXxymaZzk32x";
 // const API_SECRET = "KCo3vTCsBYjIQbRhXXY7zVYMixY9esWVLpSUHNBYvzr31VfdOoYc9Q6toCFnothR";
@@ -51,9 +59,13 @@ app.get('/', async (req, res) => {
         };
         const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, chartCallback });
         const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
-        await fs.writeFile('./example.png', buffer, 'base64');
+        await fs.writeFile('./images/trades.png', buffer, 'base64');
 
-        res.send(prices);
+        const imageList = [];
+        imageList.push({ src: "./images/trades.png", name: "trades" });
+        res.render("dynamic", { imageList: imageList });
+
+        // res.send(prices);
 
     } catch (err) {
         console.error(`Error fetching trades:`, err.response ? err.response.data : err.message);
