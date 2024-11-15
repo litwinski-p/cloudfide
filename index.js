@@ -1,6 +1,7 @@
 import express from 'express';
 import axios from 'axios';
 import crypto from 'crypto';
+import { plot, Plot } from 'nodeplotlib';
 
 
 const app = express();
