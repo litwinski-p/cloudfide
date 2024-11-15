@@ -1,6 +1,7 @@
 import express from 'express';
 import axios from 'axios';
-
+import {ChartJSNodeCanvas} from "chartjs-node-canvas";
+import { promises as fs } from 'fs';
 
 const app = express();
 const port = 3000;
@@ -23,6 +24,34 @@ app.get('/', async (req, res) => {
             });
 
         const prices = response.data.map((item) => item.price);
+
+        const width = 400;
+        const height = 400;
+        const configuration = {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+        };
+        const chartCallback = (ChartJS) => {
+            ChartJS.defaults.responsive = true;
+            ChartJS.defaults.maintainAspectRatio = false;
+        };
+        const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, chartCallback });
+        const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
+        await fs.writeFile('./example.png', buffer, 'base64');
 
         res.send(prices);
 

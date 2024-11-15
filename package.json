@@ -15,6 +15,7 @@
     "chart.js": "^3.9.1",
     "chartjs-node-canvas": "^4.1.6",
     "express": "^4.21.1",
+    "express-handlebars": "^8.0.1",
     "nodeplotlib": "^1.1.2"
   }
 }
