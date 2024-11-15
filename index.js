@@ -9,7 +9,7 @@ import exphbs from "express-handlebars"
 const app = express();
 const port = 3000;
 
-app.engine("handlebars", exphbs.engine());
+app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 app.use(express.static("images"));
 
@@ -63,7 +63,7 @@ app.get('/', async (req, res) => {
 
 
         const imageList = [];
-        imageList.push({ src: `./images/trades.png` });
+        imageList.push({ src: `images/trades.png` });
         res.render("dynamic", { imageList: imageList });
 
         // res.send(prices);
