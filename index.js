@@ -1,16 +1,15 @@
 import express from 'express';
 import axios from 'axios';
 import {ChartJSNodeCanvas} from "chartjs-node-canvas";
-import { promises as fs } from 'fs';
+import {promises as fs} from 'fs';
 import path from "path"
 import exphbs from "express-handlebars"
-import {time as Utils} from "d3";
 
 
 const app = express();
 const port = 3000;
 
-app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
+app.engine("handlebars", exphbs.engine({defaultLayout: "main"}));
 app.set("view engine", "handlebars");
 app.use(express.static("images"));
 
@@ -28,7 +27,7 @@ app.get('/', async (req, res) => {
                     'X-MBX-APIKEY': API_KEY
                 }, params: {
                     symbol,
-                    limit: 100
+                    limit: 20
                 }
             });
 
@@ -36,37 +35,32 @@ app.get('/', async (req, res) => {
 
         const width = 400;
         const height = 400;
-        const labels = Utils.months({count: 7});
         const configuration = {
-            type: 'ba   r',
+            type: 'line',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
+                    label: "Trades",
+                    data: prices,
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
                 }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            },
+            }
         };
         const chartCallback = (ChartJS) => {
             ChartJS.defaults.responsive = true;
             ChartJS.defaults.maintainAspectRatio = false;
         };
-        const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height, chartCallback });
+        const chartJSNodeCanvas = new ChartJSNodeCanvas({width, height, chartCallback});
         const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
         await fs.writeFile('./images/trades.png', buffer, 'base64');
 
 
         const imageList = [];
-        imageList.push({ src: `trades.png` });
-        res.render("dynamic", { imageList: imageList });
+        imageList.push({src: `trades.png`});
+        console.log(prices);
+        res.render("dynamic", {imageList: imageList});
 
 
     } catch (err) {
