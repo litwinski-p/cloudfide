@@ -4,6 +4,7 @@ import {ChartJSNodeCanvas} from "chartjs-node-canvas";
 import { promises as fs } from 'fs';
 import path from "path"
 import exphbs from "express-handlebars"
+import {time as Utils} from "d3";
 
 
 const app = express();
@@ -35,8 +36,9 @@ app.get('/', async (req, res) => {
 
         const width = 400;
         const height = 400;
+        const labels = Utils.months({count: 7});
         const configuration = {
-            type: 'bar',
+            type: 'ba   r',
             data: {
                 labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
                 datasets: [{
@@ -63,10 +65,9 @@ app.get('/', async (req, res) => {
 
 
         const imageList = [];
-        imageList.push({ src: `images/trades.png` });
+        imageList.push({ src: `trades.png` });
         res.render("dynamic", { imageList: imageList });
 
-        // res.send(prices);
 
     } catch (err) {
         console.error(`Error fetching trades:`, err.response ? err.response.data : err.message);
