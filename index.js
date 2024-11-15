@@ -61,8 +61,9 @@ app.get('/', async (req, res) => {
         const buffer = await chartJSNodeCanvas.renderToBuffer(configuration);
         await fs.writeFile('./images/trades.png', buffer, 'base64');
 
+
         const imageList = [];
-        imageList.push({ src: "./images/trades.png", name: "trades" });
+        imageList.push({ src: `./images/trades.png` });
         res.render("dynamic", { imageList: imageList });
 
         // res.send(prices);
