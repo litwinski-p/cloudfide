@@ -27,7 +27,7 @@ app.get('/', async (req, res) => {
                     'X-MBX-APIKEY': API_KEY
                 }, params: {
                     symbol,
-                    limit: 20
+                    limit: 100
                 }
             });
 
@@ -38,7 +38,7 @@ app.get('/', async (req, res) => {
         const configuration = {
             type: 'line',
             data: {
-                labels: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+                labels: [...Array(100 - 1 + 1).keys()].map(x => x + 1),
                 datasets: [{
                     label: "Trades",
                     data: prices,
