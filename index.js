@@ -1,7 +1,5 @@
 import express from 'express';
 import axios from 'axios';
-import crypto from 'crypto';
-import { plot, Plot } from 'nodeplotlib';
 
 
 const app = express();
@@ -27,6 +25,7 @@ app.get('/', async (req, res) => {
         const prices = response.data.map((item) => item.price);
 
         res.send(prices);
+
     } catch (err) {
         console.error(`Error fetching trades:`, err.response ? err.response.data : err.message);
     }
